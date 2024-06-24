@@ -22,15 +22,17 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className} h-screen`}>
-        {/* <ThemeProvider
+        <ClerkProvider afterSignOutUrl={"/"}>
+          {/* <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
           storageKey="notion-theme"
           > */}
-        <ClerkProvider afterSignOutUrl={"/"}>{children}</ClerkProvider>
-        {/* </ThemeProvider> */}
+          {children}
+          {/* </ThemeProvider> */}
+        </ClerkProvider>
       </body>
     </html>
   );
