@@ -1,15 +1,17 @@
 "use client";
 
 import { useMediaQuery } from "usehooks-ts";
-import { MenuIcon } from "lucide-react";
 
 import { usePathname } from "next/navigation";
 import { ElementRef, useEffect, useRef, useState } from "react";
 
 import { cn } from "@/lib/utils";
+
 import { CollapseButton } from "./collapse-btn";
 import { ResizeDiv } from "./resize-div";
-import { UserItem } from "./user-item";
+import { NavbarActions } from "./navbar-actions";
+import { NavDocuments } from "./nav-documents";
+import { CollapsedNav } from "./collapsed-nav";
 
 export const Navigation = () => {
   const [isMounted, setIsMounted] = useState(false);
@@ -51,7 +53,7 @@ export const Navigation = () => {
     if (!isResizingRef.current) return;
 
     let newWidth = e.clientX;
-    if (newWidth < 240) newWidth = 240;
+    if (newWidth < 256) newWidth = 256;
     if (newWidth > 480) newWidth = 480;
 
     if (sidebarRef.current && navbarRef.current) {
@@ -75,13 +77,13 @@ export const Navigation = () => {
       setIsCollapsed(false);
       setIsResetting(true);
 
-      sidebarRef.current.style.width = isMobile ? "100%" : "240px";
+      sidebarRef.current.style.width = isMobile ? "100%" : "256px";
       navbarRef.current.style.removeProperty("width");
       navbarRef.current.style.setProperty(
         "width",
-        isMobile ? "0" : "calc(100%-240px)",
+        isMobile ? "0" : "calc(100%-256px)",
       );
-      navbarRef.current.style.setProperty("left", isMobile ? "100%" : "240px");
+      navbarRef.current.style.setProperty("left", isMobile ? "100%" : "256px");
       setTimeout(() => setIsResetting(false), 300);
     }
   };
@@ -115,37 +117,19 @@ export const Navigation = () => {
       >
         <CollapseButton onClick={collapse} isMobile={isMobile} />
         <ResizeDiv onMouseDown={handleMouseDown} resetWidth={resetWidth} />
-        <div>
-          <UserItem />
-          {/* <Item label="Search" icon={Search} isSearch onClick={search.onOpen} />
-          <Item label="Settings" icon={Settings} onClick={settings.onOpen} />
-          <Item onClick={handleCreate} label="New page" icon={PlusCircle} /> */}
-        </div>
+        <NavbarActions />
+        <NavDocuments isMobile={isMobile} />
       </aside>
-      <div
+      <CollapsedNav
         ref={navbarRef}
-        style={{ zIndex: 999 }}
+        isCollapsed={isCollapsed}
+        resetWidth={resetWidth}
         className={cn(
-          "absolute left-64 top-0 w-[calc(100%-240px)]",
+          "absolute left-64 top-0 w-[calc(100%-256px)]",
           isResetting && "transition-all duration-300 ease-in-out",
           isMobile && "left-0 w-full",
         )}
-      >
-        <nav
-          className={cn(
-            "w-full bg-transparent px-3 py-2",
-            !isCollapsed && "p-0",
-          )}
-        >
-          {isCollapsed && (
-            <MenuIcon
-              onClick={resetWidth}
-              role="button"
-              className="h-6 w-6 text-muted-foreground"
-            />
-          )}
-        </nav>
-      </div>
+      />
     </>
   );
 };

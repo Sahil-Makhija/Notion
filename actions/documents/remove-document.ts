@@ -9,13 +9,12 @@ import { revalidatePath } from "next/cache";
 
 import { db } from "@/db";
 
-const CreateDocumentSchema = z.object({
-  title: z.string(),
-  parentDocument: z.string().optional(),
+const Schema = z.object({
+  id: z.string(),
 });
 
-export const createDocument = createServerAction()
-  .input(CreateDocumentSchema)
+export const removeDocument = createServerAction()
+  .input(Schema)
   .handler(async ({ input }) => {
     const { userId } = auth();
     if (!userId) {
@@ -24,15 +23,15 @@ export const createDocument = createServerAction()
 
     let document;
 
-    document = await db.document.create({
-      data: {
-        ...input,
-        isArchived: false,
-        isPublished: false,
-        userId,
-      },
+    document = await db.document.delete({
+      where: { id: input.id, userId },
     });
 
+    if (!document) {
+      throw new Error("Document not found");
+    }
+
     revalidatePath("/documents");
+
     return document;
   });

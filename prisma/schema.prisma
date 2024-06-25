@@ -19,7 +19,7 @@ model User {
 }
 
 model Document {
-  id             String  @id @default(cuid())
+  id             String    @id @default(cuid())
   title          String
   userId         String
   isArchived     Boolean
@@ -28,7 +28,8 @@ model Document {
   coverImage     String?
   icon           String?
   isPublished    Boolean
+  createdAt      DateTime? @default(now())
 
-  @@index([userId])
-  @@index([userId, parentDocument])
+  @@index(fields: [userId], map: "by_user")
+  @@index(fields: [userId, parentDocument], map: "by_user_parent")
 }

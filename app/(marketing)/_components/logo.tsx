@@ -12,7 +12,7 @@ const Logo = () => {
     <div className="hidden items-center gap-x-2 md:flex">
       <Image alt="Logo" src={"/logo.svg"} height={40} width={40} />
 
-      <p className={cn("font-semibold", font.className)}>Jotion</p>
+      <p className={cn("font-semibold", font.className)}>Notion</p>
     </div>
   );
 };
