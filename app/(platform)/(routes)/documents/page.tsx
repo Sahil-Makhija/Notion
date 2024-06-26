@@ -1,16 +1,16 @@
 "use client";
 
+import { useUser } from "@clerk/nextjs";
 import { useServerAction } from "zsa-react";
 import { toast } from "sonner";
 import { PlusCircle } from "lucide-react";
 
 import Image from "next/image";
-
-import { Button } from "@/components/ui";
-import { useUser } from "@clerk/nextjs";
-import { createDocument } from "@/actions/documents/create-document";
 import { useCallback } from "react";
-import { useQueryClient } from "@tanstack/react-query";
+
+import { createDocument } from "@/actions";
+import { useRevalidate } from "@/lib/hooks";
+import { Button } from "@/components/ui";
 
 const DocumentsPage = () => {
   const { user } = useUser();
@@ -35,12 +35,10 @@ const DocumentsPage = () => {
 export default DocumentsPage;
 
 const CreateNoteButton = () => {
-  const queryClient = useQueryClient();
+  const { revalidate } = useRevalidate();
   const { execute } = useServerAction(createDocument, {
     onSuccess: ({ data }) => {
-      queryClient.invalidateQueries({
-        queryKey: [`nav-docs-${data.parentDocument || "undefined"}`],
-      });
+      revalidate(`nav-docs-${data.parentDocument || "undefined"}`);
       toast.success("New note created!");
     },
     onError: () => toast.error("Failed to create a new note."),

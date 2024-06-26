@@ -27,6 +27,7 @@ import {
   DropdownMenuItem,
 } from "@/components/ui";
 import { archiveDocument, createDocument } from "@/actions";
+import { useRevalidate } from "@/lib/hooks";
 
 export type ItemProps = {
   id?: Document["id"];
@@ -57,7 +58,7 @@ export const Item = ({
 }: ItemProps) => {
   const { user } = useUser();
   const router = useRouter();
-  const queryClient = useQueryClient();
+  const { revalidate } = useRevalidate();
 
   const { execute: create } = useServerAction(createDocument, {
     onSuccess: ({ data: document }) => {
@@ -68,9 +69,7 @@ export const Item = ({
   });
   const { execute: archive } = useServerAction(archiveDocument, {
     onSuccess: ({ data }) => {
-      queryClient.invalidateQueries({
-        queryKey: [`nav-docs-${data.parentDocument || "undefined"}`],
-      });
+      revalidate(`nav-docs-${data.parentDocument || "undefined"}`);
       toast.success("Note moved to trash!");
     },
     onError: () => toast.error("Failed to archive note."),

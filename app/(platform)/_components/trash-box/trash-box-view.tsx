@@ -1,19 +1,19 @@
 "use client";
 
-import { Search, Trash, Undo } from "lucide-react";
+import { useServerAction } from "zsa-react";
+import { Search } from "lucide-react";
 import { toast } from "sonner";
+
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 
-// import { ConfirmModal } from "@/components/modals/ConfirmModal";
+import { removeDocument, restoreDocument } from "@/actions";
 import { Document } from "@prisma/client";
+import { useRevalidate } from "@/lib/hooks";
+
 import { Input } from "@/components/ui";
 import { Spinner } from "@/components/shared";
-import { useServerAction } from "zsa-react";
-import { removeDocument } from "@/actions";
-import { ConfirmModal } from "@/components/modals";
 import { TrashItem } from "./trash-item";
-import { useQueryClient } from "@tanstack/react-query";
 
 interface TrashBoxViewProps {
   documents: Array<{ id: Document["id"]; title: Document["title"] }>;
@@ -22,6 +22,8 @@ interface TrashBoxViewProps {
 export const TrashBoxView = ({ documents }: TrashBoxViewProps) => {
   const router = useRouter();
   const params = useParams();
+
+  const { revalidate } = useRevalidate();
 
   const [search, setSearch] = useState("");
 
@@ -33,28 +35,35 @@ export const TrashBoxView = ({ documents }: TrashBoxViewProps) => {
     router.push(`/documents/${documentId}`);
   };
 
-  // const onRestore = (
-  //   event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-  //   documentId: Document["id"],
-  // ) => {
-  //   event.stopPropagation();
-  //   const promise = restore({ id: documentId });
+  const { execute: restore, error } = useServerAction(restoreDocument, {
+    onSuccess: ({ data }) => {
+      toast.success("Note(s) restored!");
+      revalidate([
+        "archived-notes",
+        `nav-docs-${data.parentDocument || "undefined"}`,
+      ]);
+    },
+    onError: () => toast.error("Failed to restore note."),
+  });
 
-  //   toast.promise(promise, {
-  //     loading: "Restoring note..",
-  //     success: "Note restored!",
-  //     error: "Failed to restore note.",
-  //   });
-  // };
+  console.log({ error });
 
-  const queryClient = useQueryClient();
+  const onRestore = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    documentId: Document["id"],
+  ) => {
+    event.stopPropagation();
+    const promise = restore({ id: documentId });
+
+    toast.promise(promise, {
+      loading: "Restoring note..",
+    });
+  };
 
   const { execute: remove } = useServerAction(removeDocument, {
     onSuccess: () => {
       toast.success("Note deleted!");
-      queryClient.invalidateQueries({
-        queryKey: ["archived-notes"],
-      });
+      revalidate("archived-notes");
     },
     onError: () => toast.error("Failed to delete note."),
   });
@@ -105,6 +114,7 @@ export const TrashBoxView = ({ documents }: TrashBoxViewProps) => {
             key={document.id}
             {...document}
             onClick={onClick}
+            onRestore={onRestore}
             onRemove={onRemove}
           />
         ))}

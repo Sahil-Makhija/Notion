@@ -5,8 +5,6 @@ import { auth } from "@clerk/nextjs/server";
 import { z } from "zod";
 import { createServerAction } from "zsa";
 
-import { revalidatePath } from "next/cache";
-
 import { db } from "@/db";
 
 const Schema = z.object({
@@ -30,8 +28,6 @@ export const removeDocument = createServerAction()
     if (!document) {
       throw new Error("Document not found");
     }
-
-    revalidatePath("/documents");
 
     return document;
   });

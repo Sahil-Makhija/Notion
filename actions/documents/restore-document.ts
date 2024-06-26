@@ -12,7 +12,7 @@ const Schema = z.object({
   id: z.string(),
 });
 
-export const archiveDocument = createServerAction()
+export const restoreDocument = createServerAction()
   .input(Schema)
   .handler(async ({ input }) => {
     const { userId } = auth();
@@ -24,14 +24,14 @@ export const archiveDocument = createServerAction()
 
     document = await db.document.update({
       where: { id: input.id, userId },
-      data: { isArchived: true },
+      data: { isArchived: false },
     });
 
     if (!document) {
       throw new Error("Document not found");
     }
 
-    const archiveChildren = async (id: Document["id"]) => {
+    const restoreChildren = async (id: Document["id"]) => {
       const children = await db.document.findMany({
         where: {
           parentDocument: id,
@@ -48,14 +48,13 @@ export const archiveDocument = createServerAction()
             id: child.id,
           },
           data: {
-            isArchived: true,
+            isArchived: false,
           },
         });
-        archiveChildren(child.id);
+        restoreChildren(child.id);
       }
     };
 
-    archiveChildren(input.id);
-
+    restoreChildren(input.id);
     return document;
   });

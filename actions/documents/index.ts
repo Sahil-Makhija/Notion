@@ -4,3 +4,4 @@ export { getAllDocuments } from "./get-all-documents";
 export { archiveDocument } from "./archive-document";
 export { removeDocument } from "./remove-document";
 export { getArchivedDocuments } from "./get-archived-documents";
+export { restoreDocument } from "./restore-document";
