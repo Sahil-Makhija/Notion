@@ -35,7 +35,7 @@ export const TrashBoxView = ({ documents }: TrashBoxViewProps) => {
     router.push(`/documents/${documentId}`);
   };
 
-  const { execute: restore, error } = useServerAction(restoreDocument, {
+  const { execute: restore } = useServerAction(restoreDocument, {
     onSuccess: ({ data }) => {
       toast.success("Note(s) restored!");
       revalidate([
@@ -45,8 +45,6 @@ export const TrashBoxView = ({ documents }: TrashBoxViewProps) => {
     },
     onError: () => toast.error("Failed to restore note."),
   });
-
-  console.log({ error });
 
   const onRestore = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,

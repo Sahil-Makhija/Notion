@@ -23,7 +23,7 @@ export const restoreDocument = createServerAction()
     let document;
 
     document = await db.document.update({
-      where: { id: input.id, userId },
+      where: { id: input.id, userId, isArchived: true },
       data: { isArchived: false },
     });
 

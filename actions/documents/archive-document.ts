@@ -24,7 +24,7 @@ export const archiveDocument = createServerAction()
 
     document = await db.document.update({
       where: { id: input.id, userId },
-      data: { isArchived: true },
+      data: { isArchived: true, isPublished: false },
     });
 
     if (!document) {
@@ -49,6 +49,7 @@ export const archiveDocument = createServerAction()
           },
           data: {
             isArchived: true,
+            isPublished: false,
           },
         });
         archiveChildren(child.id);
