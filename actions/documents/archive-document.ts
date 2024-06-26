@@ -8,6 +8,7 @@ import { createServerAction } from "zsa";
 import { revalidateTag } from "next/cache";
 
 import { db } from "@/db";
+import { Document } from "@prisma/client";
 
 const Schema = z.object({
   id: z.string(),
@@ -31,7 +32,33 @@ export const archiveDocument = createServerAction()
     if (!document) {
       throw new Error("Document not found");
     }
-    revalidateTag(`nav-docs-${document.parentDocument || "undefined"}`);
 
+    const archiveChildren = async (id: Document["id"]) => {
+      const children = await db.document.findMany({
+        where: {
+          parentDocument: id,
+          userId,
+        },
+        select: {
+          id: true,
+        },
+      });
+
+      for (const child of children) {
+        await db.document.update({
+          where: {
+            id: child.id,
+          },
+          data: {
+            isArchived: true,
+          },
+        });
+        archiveChildren(child.id);
+      }
+    };
+
+    archiveChildren(input.id);
+
+    revalidateTag(`nav-docs-${document.parentDocument || "undefined"}`);
     return document;
   });

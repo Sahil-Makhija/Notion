@@ -5,6 +5,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui";
 import { DocumentListContainer } from "./document-list";
 import { NewPageItem } from "./new-page-item";
 import { Item } from "./item";
+import { TrashBox } from "../trash-box";
 
 export const NavDocuments = ({ isMobile }: { isMobile: boolean }) => {
   return (
@@ -19,7 +20,7 @@ export const NavDocuments = ({ isMobile }: { isMobile: boolean }) => {
           side={isMobile ? "bottom" : "right"}
           className="w-72 p-0"
         >
-          {/* <TrashBox /> */}
+          <TrashBox />
         </PopoverContent>
       </Popover>
     </div>
