@@ -9,7 +9,8 @@ import { useRouter } from "next/navigation";
 export const NewPageItem = ({
   icon,
   label,
-}: Pick<ItemProps, "icon" | "label" | "onClick">) => {
+  className,
+}: Pick<ItemProps, "icon" | "label" | "onClick" | "className">) => {
   const router = useRouter();
 
   const { execute: create } = useServerAction(createDocument, {
@@ -23,5 +24,12 @@ export const NewPageItem = ({
     const promise = create({ title: "Untitled" });
     toast.promise(promise, { loading: "Creating a new note...." });
   };
-  return <Item label={label} icon={icon} onClick={handleCreate} />;
+  return (
+    <Item
+      className={className}
+      label={label}
+      icon={icon}
+      onClick={handleCreate}
+    />
+  );
 };

@@ -10,6 +10,7 @@ import { Button } from "@/components/ui";
 import { useUser } from "@clerk/nextjs";
 import { createDocument } from "@/actions/documents/create-document";
 import { useCallback } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 
 const DocumentsPage = () => {
   const { user } = useUser();
@@ -34,8 +35,14 @@ const DocumentsPage = () => {
 export default DocumentsPage;
 
 const CreateNoteButton = () => {
+  const queryClient = useQueryClient();
   const { execute } = useServerAction(createDocument, {
-    onSuccess: () => toast.success("New note created!"),
+    onSuccess: ({ data }) => {
+      queryClient.invalidateQueries({
+        queryKey: [`nav-docs-${data.parentDocument || "undefined"}`],
+      });
+      toast.success("New note created!");
+    },
     onError: () => toast.error("Failed to create a new note."),
   });
 

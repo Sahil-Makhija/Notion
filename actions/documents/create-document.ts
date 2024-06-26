@@ -5,7 +5,7 @@ import { auth } from "@clerk/nextjs/server";
 import { z } from "zod";
 import { createServerAction } from "zsa";
 
-import { revalidatePath } from "next/cache";
+import { revalidateTag } from "next/cache";
 
 import { db } from "@/db";
 
@@ -33,6 +33,7 @@ export const createDocument = createServerAction()
       },
     });
 
-    revalidatePath("/documents");
+    // revalidatePath("/api/sidebar/undefined");
+    revalidateTag(`nav-docs-${document.parentDocument ?? "undefined"}`);
     return document;
   });

@@ -5,7 +5,7 @@ import { auth } from "@clerk/nextjs/server";
 import { z } from "zod";
 import { createServerAction } from "zsa";
 
-import { revalidatePath } from "next/cache";
+import { revalidateTag } from "next/cache";
 
 import { db } from "@/db";
 
@@ -31,8 +31,7 @@ export const archiveDocument = createServerAction()
     if (!document) {
       throw new Error("Document not found");
     }
-
-    revalidatePath("/documents");
+    revalidateTag(`nav-docs-${document.parentDocument || "undefined"}`);
 
     return document;
   });

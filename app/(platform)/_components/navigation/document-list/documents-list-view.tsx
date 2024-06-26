@@ -1,25 +1,23 @@
 "use client";
 
-import { useServerAction } from "zsa-react";
 import { FileIcon } from "lucide-react";
 
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { Document } from "@prisma/client";
 
-import { getSidebar } from "@/actions";
 import { cn } from "@/lib/utils";
-import { Item } from "./item";
+import { Item } from "../item";
+import { DocumentListContainer } from "./document-list-container";
 
 interface DocumentListProps {
-  parentDocumentId?: Document["id"];
+  documents?: Document[];
   level?: number;
-  //   data?: Array<unknown>; //TODO: Something from `Document`
 }
 
-export const DocumentList = ({
-  parentDocumentId,
+export const DocumentListView = ({
+  documents,
   level = 0,
 }: DocumentListProps) => {
   const params = useParams();
@@ -33,28 +31,9 @@ export const DocumentList = ({
     }));
   };
 
-  const { execute, data: documents, isPending } = useServerAction(getSidebar);
-  useEffect(() => {
-    execute({ parentDocument: parentDocumentId });
-  }, [execute, parentDocumentId]);
-
   const onRedirect = (documentId: string) => {
     router.push(`/documents/${documentId}`);
   };
-
-  if (isPending) {
-    return (
-      <>
-        <Item.Skeleton level={level} />
-        {level === 0 && (
-          <>
-            <Item.Skeleton level={level} />
-            <Item.Skeleton level={level} />
-          </>
-        )}
-      </>
-    );
-  }
 
   return (
     <>
@@ -82,7 +61,10 @@ export const DocumentList = ({
             expanded={expanded[document.id]}
           />
           {expanded[document.id] && (
-            <DocumentList parentDocumentId={document.id} level={level + 1} />
+            <DocumentListContainer
+              parentDocumentId={document.id}
+              level={level + 1}
+            />
           )}
         </div>
       ))}
