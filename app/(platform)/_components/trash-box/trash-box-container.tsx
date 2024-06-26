@@ -11,7 +11,7 @@ export const TrashBoxContainer = React.memo(() => {
     { id: Document["id"]; title: Document["title"] }[]
   >({
     queryKey: ["archived-notes"],
-    queryFn: () => fetcher("/api/trash"),
+    queryFn: () => fetcher("/api/documents/trash"),
   });
   return <TrashBoxView documents={documents ?? []} />;
 });

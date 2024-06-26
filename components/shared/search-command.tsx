@@ -25,7 +25,7 @@ export const SearchCommand = () => {
   const router = useRouter();
   const { data: documents } = useQuery<Document[]>({
     queryKey: ["search-docs"],
-    queryFn: () => fetcher("/api/search"),
+    queryFn: () => fetcher("/api/documents/search"),
   });
 
   const toggle = useSearch((store) => store.toggle);

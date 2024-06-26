@@ -18,7 +18,7 @@ export const DocumentListContainer = ({
 }: DocumentListContainerProps) => {
   const { data: documents, isPending } = useQuery<Document[]>({
     queryKey: [`nav-docs-${parentDocumentId}`],
-    queryFn: () => fetcher(`/api/sidebar/${parentDocumentId}`),
+    queryFn: () => fetcher(`/api/documents/sidebar/${parentDocumentId}`),
   });
 
   if (isPending) {
