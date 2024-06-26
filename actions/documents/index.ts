@@ -1,0 +1,4 @@
+export { createDocument } from "./create-document";
+export { archiveDocument } from "./archive-document";
+export { removeDocument } from "./remove-document";
+export { restoreDocument } from "./restore-document";

@@ -1,8 +1,10 @@
+import { ClerkProvider } from "@clerk/nextjs";
+
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
 import "./globals.css";
-import { ClerkProvider } from "@clerk/nextjs";
+import { ThemeProvider } from "@/components/providers";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,15 +24,17 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className} h-screen`}>
-        {/* <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-          storageKey="notion-theme"
-          > */}
-        <ClerkProvider afterSignOutUrl={"/"}>{children}</ClerkProvider>
-        {/* </ThemeProvider> */}
+        <ClerkProvider afterSignOutUrl={"/"}>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+            storageKey="notion-theme"
+          >
+            {children}
+          </ThemeProvider>
+        </ClerkProvider>
       </body>
     </html>
   );

@@ -6,7 +6,7 @@ import Link from "next/link";
 
 import { useScrollTop } from "@/lib/hooks";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui";
 
 import Logo from "./logo";
 import { Spinner } from "@/components/shared";

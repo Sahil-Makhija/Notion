@@ -6,7 +6,7 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 import { Spinner } from "@/components/shared";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui";
 
 export const Heading = () => {
   const { isLoaded, isSignedIn } = useAuth();
