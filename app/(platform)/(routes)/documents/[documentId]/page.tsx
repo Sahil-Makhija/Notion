@@ -2,8 +2,8 @@
 
 import { useServerAction } from "zsa-react";
 import { useQuery } from "@tanstack/react-query";
-// import dynamic from "next/dynamic";
-// import { useMemo } from "react";
+import dynamic from "next/dynamic";
+import { useMemo } from "react";
 
 import { updateDocument } from "@/actions";
 import { Document } from "@prisma/client";
@@ -12,6 +12,7 @@ import { fetcher } from "@/lib/utils";
 // import { Cover } from "@/components/cover";;
 import { Skeleton } from "@/components/ui";
 import { ImageCover, Toolbar } from "@/components/shared";
+import { notFound } from "next/navigation";
 interface DocumentIdPageProps {
   params: {
     documentId: Document["id"];
@@ -19,10 +20,10 @@ interface DocumentIdPageProps {
 }
 
 const DocumentIdPage = ({ params }: DocumentIdPageProps) => {
-  //   const Editor = useMemo(
-  //     () => dynamic(() => import("@/components/editor"), { ssr: false }),
-  //     [],
-  //   );
+  const Editor = useMemo(
+    () => dynamic(() => import("@/components/shared/editor"), { ssr: false }),
+    [],
+  );
 
   const { data: document, isPending } = useQuery<Document>({
     queryKey: [params.documentId],
@@ -55,7 +56,7 @@ const DocumentIdPage = ({ params }: DocumentIdPageProps) => {
   }
 
   if (!document) {
-    return <div>Not found</div>;
+    throw new Error("Document not found!");
   }
 
   return (
@@ -63,7 +64,7 @@ const DocumentIdPage = ({ params }: DocumentIdPageProps) => {
       <ImageCover url={document.coverImage} />
       <div className="mx-auto md:max-w-3xl lg:max-w-4xl">
         <Toolbar initialData={document} preview={false} />
-        {/* <Editor onChange={onChange} initialContent={document.content} /> */}
+        <Editor onChange={onChange} initialContent={document.content} />
       </div>
     </div>
   );
