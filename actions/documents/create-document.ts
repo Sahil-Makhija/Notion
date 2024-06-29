@@ -7,13 +7,13 @@ import { createServerAction } from "zsa";
 
 import { db } from "@/db";
 
-const CreateDocumentSchema = z.object({
+const CreateDocumentschema = z.object({
   title: z.string(),
   parentDocument: z.string().optional(),
 });
 
 export const createDocument = createServerAction()
-  .input(CreateDocumentSchema)
+  .input(CreateDocumentschema)
   .handler(async ({ input }) => {
     const { userId } = auth();
     if (!userId) {

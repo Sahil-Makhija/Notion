@@ -1,17 +1,15 @@
 "use server";
 
+import { db } from "@/db";
 import { auth } from "@clerk/nextjs/server";
-
 import { z } from "zod";
 import { createServerAction } from "zsa";
 
-import { db } from "@/db";
-
 const schema = z.object({
-  id: z.string(),
+  documentId: z.string(),
 });
 
-export const removeDocument = createServerAction()
+export const removeCoverImage = createServerAction()
   .input(schema)
   .handler(async ({ input }) => {
     const { userId } = auth();
@@ -19,10 +17,14 @@ export const removeDocument = createServerAction()
       throw new Error("Unauthenticated!");
     }
 
-    let document;
-
-    document = await db.document.delete({
-      where: { id: input.id, userId },
+    const document = await db.document.update({
+      where: {
+        userId,
+        id: input.documentId,
+      },
+      data: {
+        coverImage: null,
+      },
     });
 
     if (!document) {

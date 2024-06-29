@@ -8,12 +8,12 @@ import { createServerAction } from "zsa";
 import { db } from "@/db";
 import { Document } from "@prisma/client";
 
-const Schema = z.object({
+const schema = z.object({
   id: z.string(),
 });
 
 export const archiveDocument = createServerAction()
-  .input(Schema)
+  .input(schema)
   .handler(async ({ input }) => {
     const { userId } = auth();
     if (!userId) {
