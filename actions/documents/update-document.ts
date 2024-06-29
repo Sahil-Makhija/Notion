@@ -5,7 +5,7 @@ import { auth } from "@clerk/nextjs/server";
 
 import { db } from "@/db";
 
-const Schema = z.object({
+const schema = z.object({
   id: z.string(),
   title: z.string().optional(),
   content: z.string().optional(),
@@ -15,7 +15,7 @@ const Schema = z.object({
 });
 
 export const updateDocument = createServerAction()
-  .input(Schema)
+  .input(schema)
   .handler(async ({ input }) => {
     const { userId } = auth();
     if (!userId) {

@@ -17,7 +17,7 @@ export async function GET(
       return new NextResponse("Unauthenticated", { status: 401 });
     }
     const document = await db.document.findUnique({
-      where: { userId, isArchived: false, id: params.documentId },
+      where: { userId, id: params.documentId },
     });
     return NextResponse.json(document);
   } catch (error) {

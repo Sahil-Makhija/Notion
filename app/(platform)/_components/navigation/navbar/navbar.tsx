@@ -8,6 +8,7 @@ import { Document } from "@prisma/client";
 import { fetcher } from "@/lib/utils";
 
 import { Title } from "./title";
+import { Banner } from "./banner";
 
 // import { api } from "@/convex/_generated/api";
 // import { Id } from "@/convex/_generated/dataModel";
@@ -64,7 +65,7 @@ export const Navbar = ({ isCollapsed, onResetWidth }: NavbarProps) => {
           </div>
         </div>
       </nav>
-      {/* {document.isArchived && <Banner documentId={document.id} />} */}
+      {document.isArchived && <Banner documentId={document.id} />}
     </>
   );
 };
