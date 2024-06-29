@@ -2,8 +2,8 @@
 
 import "@blocknote/core/style.css";
 
-import { BlockNoteEditor, PartialBlock } from "@blocknote/core";
-import { useCreateBlockNote, DragHandleMenu } from "@blocknote/react";
+import { PartialBlock } from "@blocknote/core";
+import { useCreateBlockNote } from "@blocknote/react";
 import { BlockNoteView } from "@blocknote/mantine";
 import { useTheme } from "next-themes";
 

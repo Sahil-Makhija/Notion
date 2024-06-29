@@ -4,7 +4,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
 import "./globals.css";
-import { ThemeProvider } from "@/components/providers";
+import { QueryProvider, ThemeProvider } from "@/components/providers";
+import { EdgeStoreProvider } from "@/lib/edgestore";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,15 +26,19 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className} h-screen`}>
         <ClerkProvider afterSignOutUrl={"/"}>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-            storageKey="notion-theme"
-          >
-            {children}
-          </ThemeProvider>
+          <QueryProvider>
+            <EdgeStoreProvider>
+              <ThemeProvider
+                attribute="class"
+                defaultTheme="system"
+                enableSystem
+                disableTransitionOnChange
+                storageKey="notion-theme"
+              >
+                {children}
+              </ThemeProvider>
+            </EdgeStoreProvider>
+          </QueryProvider>
         </ClerkProvider>
       </body>
     </html>

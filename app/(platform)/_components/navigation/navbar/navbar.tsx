@@ -9,6 +9,8 @@ import { fetcher } from "@/lib/utils";
 
 import { Title } from "./title";
 import { Banner } from "./banner";
+import { Menu } from "./menu";
+import { Publish } from "./publish";
 
 // import { api } from "@/convex/_generated/api";
 // import { Id } from "@/convex/_generated/dataModel";
@@ -60,8 +62,8 @@ export const Navbar = ({ isCollapsed, onResetWidth }: NavbarProps) => {
         <div className="flex w-full items-center justify-between">
           <Title initialData={document} />
           <div className="flex items-center gap-x-2">
-            {/* <Publish initialData={document} />
-            <Menu documentId={document.id} /> */}
+            <Publish initialData={document} />
+            <Menu documentId={document.id} />
           </div>
         </div>
       </nav>
