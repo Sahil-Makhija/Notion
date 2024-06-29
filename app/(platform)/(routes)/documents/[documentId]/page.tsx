@@ -11,7 +11,7 @@ import { fetcher } from "@/lib/utils";
 
 // import { Cover } from "@/components/cover";;
 import { Skeleton } from "@/components/ui";
-import { Toolbar } from "@/components/shared";
+import { ImageCover, Toolbar } from "@/components/shared";
 interface DocumentIdPageProps {
   params: {
     documentId: Document["id"];
@@ -41,7 +41,7 @@ const DocumentIdPage = ({ params }: DocumentIdPageProps) => {
   if (isPending) {
     return (
       <div>
-        {/* <Cover.Skeleton /> */}
+        <ImageCover.Skeleton />
         <div className="mx-auto mt-10 md:max-w-3xl lg:max-w-4xl">
           <div className="space-y-4 pl-8 pt-4">
             <Skeleton className="h-14 w-1/2" />
@@ -60,7 +60,7 @@ const DocumentIdPage = ({ params }: DocumentIdPageProps) => {
 
   return (
     <div className="pb-40">
-      {/* <Cover url={document.coverImage} /> */}
+      <ImageCover url={document.coverImage} />
       <div className="mx-auto md:max-w-3xl lg:max-w-4xl">
         <Toolbar initialData={document} preview={false} />
         {/* <Editor onChange={onChange} initialContent={document.content} /> */}

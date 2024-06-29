@@ -1,10 +1,13 @@
 "use client";
 
 import { useServerAction } from "zsa-react";
-import { Item, ItemProps } from "./item";
-import { createDocument } from "@/actions";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+
+import { createDocument } from "@/actions";
+import { useRevalidate } from "@/lib/hooks";
+
+import { Item, ItemProps } from "./item";
 
 export const NewPageItem = ({
   icon,
@@ -12,10 +15,12 @@ export const NewPageItem = ({
   className,
 }: Pick<ItemProps, "icon" | "label" | "onClick" | "className">) => {
   const router = useRouter();
+  const { revalidate } = useRevalidate();
 
   const { execute: create } = useServerAction(createDocument, {
     onSuccess: ({ data: document }) => {
       toast.success("New note created.");
+      revalidate(`nav-docs-${document.parentDocument || "undefined"}`);
       router.push(`/documents/${document.id}`);
     },
     onError: () => toast.error("Failed to create a note."),

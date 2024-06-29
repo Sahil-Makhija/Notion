@@ -69,7 +69,7 @@ export const Item = ({
   });
   const { execute: archive } = useServerAction(archiveDocument, {
     onSuccess: ({ data }) => {
-      revalidate(`nav-docs-${data.parentDocument || "undefined"}`);
+      revalidate([`nav-docs-${data.parentDocument || "undefined"}`, data.id]);
       toast.success("Note moved to trash!");
     },
     onError: () => toast.error("Failed to archive note."),

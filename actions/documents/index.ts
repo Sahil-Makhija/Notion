@@ -5,3 +5,4 @@ export { restoreDocument } from "./restore-document";
 export { updateDocument } from "./update-document";
 
 export { removeIcon } from "./remove-icon";
+export { removeCoverImage } from "./remove-cover-image";
